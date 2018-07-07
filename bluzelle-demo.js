@@ -1,36 +1,29 @@
-/* 
-Bluzelle sample node.js application
-*/
 
 const bluzelle = require('bluzelle');
-bluzelle.connect('ws://localhost:51011', 'foo');
-bluzelle.create('mykey2', { name: 'Peter Parker' }).then(() => 
-    {  
-    bluzelle.read('mykey2').then(value => 
-        {
-        console.log("Value gotten back from db after reading, post-create: " + JSON.stringify(value));
-        bluzelle.update('mykey2', { name: 'Spiderman' }).then(() => 
-            {
-            bluzelle.read('mykey2').then(value => 
-                {
-                console.log("Value gotten back from db after reading, post-update: " + JSON.stringify(value));
-                }, 
-                error => 
-                    {
-                    throw error;
-                    });
-            }, 
-            error => 
-                { 
-                throw error;
-                });
-        }, 
-        error => 
-            {
-            throw error;
-            });
-    }, 
-    error => 
-        {   
-        throw error;
-        });
+
+// Connect to the database
+bluzelle.connect('ws://testnet.bluzelle.com:51010', 'changeme');
+
+// Create a Key
+bluzelle.create('myKey', 'Spiderman').then(() => {
+
+	// Read it back
+	bluzelle.read('myKey').then(value => {
+
+		console.log(value); // 'Spiderman'
+
+		// Update the key
+		bluzelle.update('myKey', 'Peter Parker').then(() => {
+
+			// Read it back
+			bluzelle.read('myKey').then(value => {
+
+				console.log(value); // 'Peter Parker'
+
+			}).catch(e => console.log(e.message));
+
+		}).catch(e => console.log(e.message));
+
+	}).catch(e => console.log(e.message));
+
+}).catch(e => console.log(e.message));
